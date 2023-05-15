@@ -1,4 +1,4 @@
-import Product from "../models/Product";
+import Product from '../models/Product';
 
 export interface ProductValidationResult {
   product: Product;
@@ -26,7 +26,7 @@ function validateRequiredFields(product: Product, validationResult: ProductValid
 
   if (!code || !newPrice || typeof code !== "number" || typeof newPrice !== "number") {
     validationResult.isValid = false;
-    validationResult.rulesBroken.push("Product code and new price are required and must be numbers");
+    validationResult.rulesBroken.push('The product code and/or the new price are missing or invalid');
   }
 }
 
@@ -35,7 +35,7 @@ function validateNumericValues(product: Product, validationResult: ProductValida
 
   if (Number.isNaN(newPrice)) {
     validationResult.isValid = false;
-    validationResult.rulesBroken.push(`Invalid value for product cost price: ${newPrice}`);
+    validationResult.rulesBroken.push(`Invalid value for the new price: ${newPrice}`);
   }
 }
 
@@ -44,7 +44,7 @@ function validatePriceUpdate(product: Product, validationResult: ProductValidati
 
   if (newPrice < costPrice) {
     validationResult.isValid = false;
-    validationResult.rulesBroken.push(`The sales price cannot be lower than the cost for product with code ${code}`);
+    validationResult.rulesBroken.push('The sales price is lower than the cost price for the product');
   }
 }
 
@@ -60,6 +60,6 @@ function validatePriceChange(product: Product, validationResult: ProductValidati
 
   if (newPrice > maxAllowedPrice || newPrice < minAllowedPrice) {
     validationResult.isValid = false;
-    validationResult.rulesBroken.push(`The new price should not differ from the previous price by more than ${MAX_PRICE_CHANGE_PERCENTAGE}%`);
+    validationResult.rulesBroken.push(`The new price differs from the previous price by more than ${MAX_PRICE_CHANGE_PERCENTAGE}%`);
   }
 }
