@@ -1,0 +1,28 @@
+# Ignore node_modules directory
+node_modules/
+
+# Build and generated package files
+build/
+dist/
+
+# Environment variables
+.env
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# IDE / editor specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Backup files
+*~
+*.bak
+*.swp
+
+# Operating system-specific files
+.DS_Store
+Thumbs.db
