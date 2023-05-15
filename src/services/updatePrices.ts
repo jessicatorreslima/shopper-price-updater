@@ -3,11 +3,10 @@ import { fetchProductsInfos } from '../services/productService';
 import { csvInfosValidations, pricesValidations } from '../services/validation';
 import { loadProductsFromCSV } from '../services/csvLoader';
 
-const CSV_FILE_PATH = 'data.csv';
-
-export async function updatePrices(): Promise<void> {
+export async function updatePrices(csvFilePath: string): Promise<void> {
+  console.log("entrou");
   try {
-    const products = await loadProductsFromCSV(CSV_FILE_PATH);
+    const products = await loadProductsFromCSV(csvFilePath);
     
     csvInfosValidations(products);
 
