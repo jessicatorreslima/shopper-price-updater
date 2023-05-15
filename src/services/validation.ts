@@ -1,44 +1,54 @@
 import Product from "../models/Product";
 
-export function csvInfosValidations(products: Product[]): void {
-  for (const product of products) {
-    validateRequiredFields(product);
-    validateNumericValues(product);
-  }
+export interface ProductValidationResult {
+  product: Product;
+  isValid: boolean;
+  rulesBroken: string[];
 }
 
-export function pricesValidations(products: Product[]): void {
-  for (const product of products) {
-    validatePriceUpdate(product);
-    validatePriceChange(product);
-  }
+export function validateProduct(product: Product): ProductValidationResult {
+  const validationResult: ProductValidationResult = {
+    product,
+    isValid: true,
+    rulesBroken: [],
+  };
+
+  validateRequiredFields(product, validationResult);
+  validateNumericValues(product, validationResult);
+  validatePriceUpdate(product, validationResult);
+  validatePriceChange(product, validationResult);
+
+  return validationResult;
 }
 
-function validateRequiredFields(product: Product): void {
+function validateRequiredFields(product: Product, validationResult: ProductValidationResult): void {
   const { code, newPrice } = product;
 
   if (!code || !newPrice || typeof code !== "number" || typeof newPrice !== "number") {
-    throw new Error("Product code and new price are required and must be numbers");
+    validationResult.isValid = false;
+    validationResult.rulesBroken.push("Product code and new price are required and must be numbers");
   }
 }
 
-function validateNumericValues(product: Product): void {
+function validateNumericValues(product: Product, validationResult: ProductValidationResult): void {
   const { newPrice } = product;
 
   if (Number.isNaN(newPrice)) {
-    throw new Error(`Invalid value for product cost price: ${newPrice}`);
+    validationResult.isValid = false;
+    validationResult.rulesBroken.push(`Invalid value for product cost price: ${newPrice}`);
   }
 }
 
-function validatePriceUpdate(product: Product): void {
-  const { code, newPrice, salesPrice } = product;
+function validatePriceUpdate(product: Product, validationResult: ProductValidationResult): void {
+  const { code, newPrice, costPrice } = product;
 
-  if (newPrice < salesPrice) {
-    throw new Error(`The sales price cannot be lower than the cost for product with code ${code}`);
+  if (newPrice < costPrice) {
+    validationResult.isValid = false;
+    validationResult.rulesBroken.push(`The sales price cannot be lower than the cost for product with code ${code}`);
   }
 }
 
-function validatePriceChange(product: Product): void {
+function validatePriceChange(product: Product, validationResult: ProductValidationResult): void {
   const MAX_PRICE_CHANGE_PERCENTAGE = 10;
 
   const { code, newPrice, salesPrice } = product;
@@ -49,6 +59,7 @@ function validatePriceChange(product: Product): void {
   const minAllowedPrice = currentPrice - (currentPrice * MAX_PRICE_CHANGE_PERCENTAGE) / 100;
 
   if (newPrice > maxAllowedPrice || newPrice < minAllowedPrice) {
-    throw new Error(`Invalid price change for product with code ${code}`);
+    validationResult.isValid = false;
+    validationResult.rulesBroken.push(`The new price should not differ from the previous price by more than ${MAX_PRICE_CHANGE_PERCENTAGE}%`);
   }
 }

@@ -1,5 +1,7 @@
 import { getDatabaseConnection, closeDatabaseConnection } from '../../database';
 import Product from '../models/Product';
+import { validateProduct, ProductValidationResult } from "./validation";
+import { loadProductsFromCSV } from "./csvLoader";
 
 export function fetchProductsInfos(products: Product[]): Promise<Product[]> {
   return new Promise((resolve, reject) => {
@@ -35,4 +37,35 @@ export function fetchProductsInfos(products: Product[]): Promise<Product[]> {
   });
 }
 
-// Outras funções relacionadas aos produtos...
+export async function validateProducts(products: Product[]): Promise<ProductValidationResult[]> {
+  const validationResults: ProductValidationResult[] = [];
+  const productsDbInfos: Product[] = await fetchProductsInfos(products);
+  
+  for (const product of productsDbInfos) {
+    const validationResult = validateProduct(product);
+    validationResults.push(validationResult);
+  }
+
+  return validationResults;
+}
+
+export async function updatePrices(csvFilePath: string): Promise<void> {
+  try {
+    const products = await loadProductsFromCSV(csvFilePath);
+    
+    const productsDbInfos = await fetchProductsInfos(products);
+
+    for (const product of productsDbInfos) {
+      const { code, newPrice } = product;
+
+      // TODO: atualização dos preços no banco de dados aqui
+      // Exemplo fictício: updatePriceInDatabase(code, newPrice);
+
+      console.log(`Price updated successfully for product with code ${code}`);
+    }
+
+    console.log("Prices updated successfully!");
+  } catch (error) {
+    console.error("Failed to update prices:", error);
+  }
+}

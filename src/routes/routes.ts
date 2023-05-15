@@ -1,15 +1,15 @@
 import express from 'express';
 import multer from 'multer';
 import { loadProductsFromCSV } from '../services/csvLoader';
-import { updatePrices } from '../services/updatePrices';
+import { validateProducts } from '../services/productService';
 
 const router = express.Router();
 
 // Configurar o multer para lidar com o upload de arquivos
 const upload = multer({ dest: 'uploads/' });
 
-// Rota para receber a solicitação de upload do arquivo CSV
-router.post('/upload', upload.single('file'), async (req, res) => {
+// Rota para validar os produtos do arquivo
+router.post('/validate', upload.single('file'), async (req, res) => {
   try {
     const file = req.file;
     if (!file || !file.path) {
@@ -17,15 +17,18 @@ router.post('/upload', upload.single('file'), async (req, res) => {
       return;
     }
 
-    // Aqui você pode fazer o processamento do arquivo se o caminho do arquivo não for vazio
-    await loadProductsFromCSV(file.path);
+    const newPrices = await loadProductsFromCSV(file.path);
+    
+    // Chamar a função para validar os produtos do arquivo
+    const validatedProducts = await validateProducts(newPrices);
 
-    await updatePrices(file.path);
+    // Restante da lógica para atualização dos preços
+    // ...
 
-    res.status(200).send('Arquivo CSV enviado e processado com sucesso');
+    res.status(200).json(validatedProducts);
   } catch (error) {
-    console.error('Erro ao processar o arquivo CSV:', error);
-    res.status(500).send('Erro ao processar o arquivo CSV');
+    console.error('Erro ao validar os produtos:', error);
+    res.status(500).send('Erro ao validar os produtos');
   }
 });
 
