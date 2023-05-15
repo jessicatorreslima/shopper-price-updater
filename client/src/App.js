@@ -35,13 +35,12 @@ function App() {
 
   const handleUpdate = async () => {
     try {
-      await axios.post('/api/update', {
-        products: validatedProducts,
-      });
+      const reqBody = validatedProducts.map((validatedProduct) => validatedProduct.product);
+      await axios.post('/api/update', reqBody);
 
-      /* setSelectedFile(null);
+      setSelectedFile(null);
       setValidatedProducts([]);
-      setAllProductsValid(false); */
+      setAllProductsValid(false);
 
       console.log('Preços atualizados com sucesso');
     } catch (error) {
@@ -96,6 +95,7 @@ function App() {
           </button>
         </div>
       )}
-  </div>
-)};
+    </div>
+  )
+};
 export default App;
