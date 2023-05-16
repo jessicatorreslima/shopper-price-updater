@@ -1,5 +1,9 @@
+// App.js
 import React, { useState } from 'react';
 import axios from 'axios';
+import UploadForm from './components/UploadForm';
+import ValidationResults from './components/ValidationResults';
+import './styles.css';
 
 function App() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -21,14 +25,14 @@ function App() {
       try {
         const response = await axios.post('/api/validate', formData);
 
-        console.log('Arquivo enviado com sucesso');
+        console.log('File sent successfully');
 
         setValidatedProducts((prevProducts) => [...prevProducts, ...response.data]);
 
         const allValid = response.data.every((validationResult) => validationResult.isValid);
         setAllProductsValid(allValid);
       } catch (error) {
-        console.error('Erro ao enviar o arquivo:', error);
+        console.error('Error sending file:', error);
       }
     }
   };
@@ -42,60 +46,29 @@ function App() {
       setValidatedProducts([]);
       setAllProductsValid(false);
 
-      console.log('Preços atualizados com sucesso');
+      console.log('Prices updated successfully');
     } catch (error) {
-      console.error('Erro ao atualizar os preços:', error);
+      console.error('Error updating prices:', error);
     }
   };
 
   return (
     <div>
-      <h1>Upload de CSV</h1>
-      <form onSubmit={handleSubmit}>
-        <input type="file" accept=".csv" onChange={handleFileChange} />
-        <button type="submit">VALIDAR</button>
-      </form>
+      <h1>CSV Upload</h1>
+      <UploadForm
+        selectedFile={selectedFile}
+        handleFileChange={handleFileChange}
+        handleSubmit={handleSubmit}
+      />
       {validatedProducts.length > 0 && (
-        <div>
-          <h2>Produtos Validados</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Código</th>
-                <th>Nome</th>
-                <th>Preço Atual</th>
-                <th>Novo Preço</th>
-                <th>Regras Quebradas</th>
-              </tr>
-            </thead>
-            <tbody>
-              {validatedProducts.map((validationResult) => (
-                <tr key={validationResult.product.code}>
-                  <td>{validationResult.product.code}</td>
-                  <td>{validationResult.product.name}</td>
-                  <td>{validationResult.product.salesPrice}</td>
-                  <td>{validationResult.product.newPrice}</td>
-                  <td>
-                    {validationResult.rulesBroken.length > 0 ? (
-                      <ul>
-                        {validationResult.rulesBroken.map((rule) => (
-                          <li key={rule}>{rule}</li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p>Nenhuma regra quebrada</p>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <button type="button" onClick={handleUpdate} disabled={!allProductsValid}>
-            ATUALIZAR
-          </button>
-        </div>
+        <ValidationResults
+          validatedProducts={validatedProducts}
+          allProductsValid={allProductsValid}
+          handleUpdate={handleUpdate}
+        />
       )}
     </div>
-  )
-};
+  );
+}
+
 export default App;
