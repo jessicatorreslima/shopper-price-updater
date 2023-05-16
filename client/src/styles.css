@@ -45,3 +45,8 @@ button {
 button[type="button"] {
   background-color: #007bff;
 }
+
+button[disabled] {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

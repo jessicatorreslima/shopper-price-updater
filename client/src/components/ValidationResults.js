@@ -25,11 +25,11 @@ function ValidationResults({ validatedProducts, allProductsValid, handleUpdate }
                 {validationResult.rulesBroken.length > 0 ? (
                   <ul>
                     {validationResult.rulesBroken.map((rule) => (
-                      <li key={rule}>{rule}</li>
+                      <li key={rule} style={{ color: 'red' }}>{rule}</li>
                     ))}
                   </ul>
                 ) : (
-                  <p>No rules broken</p>
+                  <p>Nenhuma regra quebrada</p>
                 )}
               </td>
             </tr>
