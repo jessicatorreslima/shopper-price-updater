@@ -8,8 +8,8 @@ class Product {
   constructor(code: number, newPrice: number) {
     this.code = code;
     this.name = "";
-    this.costPrice = 0;
-    this.salesPrice = 0;
+    this.costPrice = NaN;
+    this.salesPrice = NaN;
     this.newPrice = newPrice;
   }
 }

@@ -15,6 +15,7 @@ export function validateProduct(product: Product): ProductValidationResult {
 
   validateRequiredFields(product, validationResult);
   validateNumericValues(product, validationResult);
+  validateProductExistence(product, validationResult);
   validatePriceUpdate(product, validationResult);
   validatePriceChange(product, validationResult);
 
@@ -39,8 +40,17 @@ function validateNumericValues(product: Product, validationResult: ProductValida
   }
 }
 
+function validateProductExistence(product: Product, validationResult: ProductValidationResult): void {
+  const { salesPrice } = product;
+
+  if (Number.isNaN(salesPrice)) {
+    validationResult.isValid = false;
+    validationResult.rulesBroken.push('O código do produto informado não existe no banco de dados');
+  }
+}
+
 function validatePriceUpdate(product: Product, validationResult: ProductValidationResult): void {
-  const { code, newPrice, costPrice } = product;
+  const { newPrice, costPrice } = product;
 
   if (newPrice < costPrice) {
     validationResult.isValid = false;
@@ -51,7 +61,7 @@ function validatePriceUpdate(product: Product, validationResult: ProductValidati
 function validatePriceChange(product: Product, validationResult: ProductValidationResult): void {
   const MAX_PRICE_CHANGE_PERCENTAGE = 10;
 
-  const { code, newPrice, salesPrice } = product;
+  const { newPrice, salesPrice } = product;
 
   const currentPrice = salesPrice;
 
