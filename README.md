@@ -40,7 +40,7 @@ The Shopper Price Updater is a web application that allows users to update price
 1. Clone the repository:
 
 ```shell
-git clone https://github.com/username/repo.git
+git clone https://github.com/jessicatorreslima/shopper-price-updater.git
 ```
 
 2. Install the backend dependencies:
