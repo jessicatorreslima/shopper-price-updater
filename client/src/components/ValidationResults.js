@@ -3,15 +3,15 @@ import React from 'react';
 function ValidationResults({ validatedProducts, allProductsValid, handleUpdate }) {
   return (
     <div>
-      <h2>Validated Products</h2>
+      <h2>Resultado da validação dos produtos</h2>
       <table>
         <thead>
           <tr>
-            <th>Code</th>
-            <th>Name</th>
-            <th>Current Price</th>
-            <th>New Price</th>
-            <th>Broken Rules</th>
+            <th>Código</th>
+            <th>Nome</th>
+            <th>Preço Atual</th>
+            <th>Novo Preço</th>
+            <th>Regra(s) Quebrada(s)</th>
           </tr>
         </thead>
         <tbody>

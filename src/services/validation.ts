@@ -26,7 +26,7 @@ function validateRequiredFields(product: Product, validationResult: ProductValid
 
   if (!code || !newPrice || typeof code !== "number" || typeof newPrice !== "number") {
     validationResult.isValid = false;
-    validationResult.rulesBroken.push('The product code and/or the new price are missing or invalid');
+    validationResult.rulesBroken.push('O código do produto e/ou o novo preço estão faltando ou inválidos');
   }
 }
 
@@ -35,7 +35,7 @@ function validateNumericValues(product: Product, validationResult: ProductValida
 
   if (Number.isNaN(newPrice)) {
     validationResult.isValid = false;
-    validationResult.rulesBroken.push(`Invalid value for the new price: ${newPrice}`);
+    validationResult.rulesBroken.push(`Valor inválido para o novo preço: ${newPrice}`);
   }
 }
 
@@ -44,7 +44,7 @@ function validatePriceUpdate(product: Product, validationResult: ProductValidati
 
   if (newPrice < costPrice) {
     validationResult.isValid = false;
-    validationResult.rulesBroken.push('The sales price is lower than the cost price for the product');
+    validationResult.rulesBroken.push('O preço de venda é menor que o preço de custo');
   }
 }
 
@@ -60,6 +60,6 @@ function validatePriceChange(product: Product, validationResult: ProductValidati
 
   if (newPrice > maxAllowedPrice || newPrice < minAllowedPrice) {
     validationResult.isValid = false;
-    validationResult.rulesBroken.push(`The new price differs from the previous price by more than ${MAX_PRICE_CHANGE_PERCENTAGE}%`);
+    validationResult.rulesBroken.push(`O novo preço difere do preço anterior em mais de ${MAX_PRICE_CHANGE_PERCENTAGE}%`);
   }
 }
