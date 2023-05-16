@@ -57,6 +57,22 @@ cd client
 npm install
 ```
 
+### Database Import
+
+To properly use this project, you need to import the `database.sql` file into your database.
+
+#### Steps for Import
+
+1. Make sure you have MySQL installed and properly configured.
+
+2. In your DBMS, create a new empty database that will be used by the project.
+
+3. Locate the `database.sql` file in this repository and import it into your newly created database:
+
+Use the command `mysql -u <username> -p <database> < database.sql` in the terminal or use a graphical interface to import the file.
+
+4. After the import, your database will be populated with the necessary tables and data for the proper functioning of the project.
+
 ### Environment Variables
 
 - Rename the .env.example file to .env in the root directory and provide the following variables:
@@ -88,6 +104,7 @@ npm start
 ### Note for macOS and Linux users:
 
 If you're using macOS or Linux, you'll need to make a small adjustment in the client's package.json file. Locate the "scripts" section and modify the "start" script as shown below:
+
 ```json
 {
   "scripts": {
