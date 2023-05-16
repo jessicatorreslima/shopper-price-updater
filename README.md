@@ -64,9 +64,9 @@ npm install
 ```shell
 DB_HOST=localhost
 DB_PORT=port
+DB_NAME=database_name
 DB_USER=username
 DB_PASSWORD=password
-DB_DATABASE=database_name
 ```
 
 - Replace localhost, port, username, password, and database_name with your MySQL database credentials.
